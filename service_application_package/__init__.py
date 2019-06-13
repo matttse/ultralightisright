@@ -16,7 +16,7 @@ mail = Mail()
 def create_app(config_class=Config):
     application = Flask(__name__)
     application.config.from_object(Config)
-
+    mongo = PyMongo(application)
     db.init_app(application)
     bcrypt.init_app(application)
     login_manager.init_app(application)
@@ -24,9 +24,13 @@ def create_app(config_class=Config):
 
     from service_application_package.users.routes import users
     from service_application_package.main.routes import main
+    from service_application_package.alist.routes import alist
+    from service_application_package.item.routes import item
     from service_application_package.errors.handlers import errors
     application.register_blueprint(users)
     application.register_blueprint(main)
+    application.register_blueprint(alist)
+    application.register_blueprint(item)
     application.register_blueprint(errors)
     @application.before_first_request
     def create_tables():

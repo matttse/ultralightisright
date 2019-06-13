@@ -13,3 +13,5 @@ class Config:
 	MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 	PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 	CLEARDB_DATABASE_URL = urlparse(os.environ['CLEARDB_DATABASE_URL'])
+	MONGO_DBNAME = "items"
+	MONGO_URI = os.environ.get('MONGO_URI')
