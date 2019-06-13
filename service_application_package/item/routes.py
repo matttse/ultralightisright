@@ -4,7 +4,7 @@ item = Blueprint('item', __name__)
 
 
 @item.route('/addItem/<new_item>', methods=['POST']) #adding new item to list
-def add_item(new_item):
+def addItem(new_item):
 	bucketList = mongo.db.bucketList
 	item_new = {'name' : new_item}
 	if bucketList.find({'name' : new_item}).count() > 0:
@@ -14,7 +14,7 @@ def add_item(new_item):
 		return "Added Item successfully"
 
 @item.route('/deleteItem/<item_name>', methods=['GET']) #function to delete one item on list
-def delete_item(item_name):
+def deleteItem(item_name):
 	bucketList = mongo.db.bucketList
 	bucketList.remove({'name': item_name})
 	return "Item deleted successfully!"
