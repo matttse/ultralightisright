@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from service_application_package.config import Config
+from flask_pymongo import PyMongo
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -24,12 +25,12 @@ def create_app(config_class=Config):
 
     from service_application_package.users.routes import users
     from service_application_package.main.routes import main
-    from service_application_package.alist.routes import alist
+    from service_application_package.aList.routes import aList
     from service_application_package.item.routes import item
     from service_application_package.errors.handlers import errors
     application.register_blueprint(users)
     application.register_blueprint(main)
-    application.register_blueprint(alist)
+    application.register_blueprint(aList)
     application.register_blueprint(item)
     application.register_blueprint(errors)
     @application.before_first_request
