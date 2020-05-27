@@ -21,7 +21,7 @@ from _weakref import (
 
 from _weakrefset import WeakSet, _IterationGuard
 
-import _collections_abc  # Import after _weakref to avoid circular import.
+import collections  # Import after _weakref to avoid circular import.
 import sys
 import itertools
 
@@ -87,7 +87,7 @@ class WeakMethod(ref):
     __hash__ = ref.__hash__
 
 
-class WeakValueDictionary(_collections_abc.MutableMapping):
+class WeakValueDictionary(collections.MutableMapping):
     """Mapping class that references values weakly.
 
     Entries in the dictionary will be discarded when no strong
@@ -171,11 +171,10 @@ class WeakValueDictionary(_collections_abc.MutableMapping):
         if self._pending_removals:
             self._commit_removals()
         new = WeakValueDictionary()
-        with _IterationGuard(self):
-            for key, wr in self.data.items():
-                o = wr()
-                if o is not None:
-                    new[key] = o
+        for key, wr in self.data.items():
+            o = wr()
+            if o is not None:
+                new[key] = o
         return new
 
     __copy__ = copy
@@ -185,11 +184,10 @@ class WeakValueDictionary(_collections_abc.MutableMapping):
         if self._pending_removals:
             self._commit_removals()
         new = self.__class__()
-        with _IterationGuard(self):
-            for key, wr in self.data.items():
-                o = wr()
-                if o is not None:
-                    new[deepcopy(key, memo)] = o
+        for key, wr in self.data.items():
+            o = wr()
+            if o is not None:
+                new[deepcopy(key, memo)] = o
         return new
 
     def get(self, key, default=None):
@@ -342,7 +340,7 @@ class KeyedRef(ref):
         super().__init__(ob, callback)
 
 
-class WeakKeyDictionary(_collections_abc.MutableMapping):
+class WeakKeyDictionary(collections.MutableMapping):
     """ Mapping class that references keys weakly.
 
     Entries in the dictionary will be discarded when there is no
@@ -410,11 +408,10 @@ class WeakKeyDictionary(_collections_abc.MutableMapping):
 
     def copy(self):
         new = WeakKeyDictionary()
-        with _IterationGuard(self):
-            for key, value in self.data.items():
-                o = key()
-                if o is not None:
-                    new[o] = value
+        for key, value in self.data.items():
+            o = key()
+            if o is not None:
+                new[o] = value
         return new
 
     __copy__ = copy
@@ -422,11 +419,10 @@ class WeakKeyDictionary(_collections_abc.MutableMapping):
     def __deepcopy__(self, memo):
         from copy import deepcopy
         new = self.__class__()
-        with _IterationGuard(self):
-            for key, value in self.data.items():
-                o = key()
-                if o is not None:
-                    new[o] = deepcopy(value, memo)
+        for key, value in self.data.items():
+            o = key()
+            if o is not None:
+                new[o] = deepcopy(value, memo)
         return new
 
     def get(self, key, default=None):
